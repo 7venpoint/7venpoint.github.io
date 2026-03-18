@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="7venPoint — Nigerian full-stack developer building high-performance websites, mobile apps, and digital solutions that drive real business results.">
+<title>7venPoint — Web &amp; App Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1A5CFF;--bdark:#0F3FBB;--bglow:rgba(26,92,255,.15);--lemon:#A8FF3E;--ldark:#7ACC1A;--lglow:rgba(168,255,62,.15);--bg:#F8F9FC;--dark:#080C1A;--muted:#64748B;--border:rgba(26,92,255,.12);--card:#fff;--shadow:0 4px 32px rgba(26,92,255,.07);--gap:90px;--r:18px;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--ease:.3s cubic-bezier(.4,0,.2,1)}
+[data-theme="dark"]{--bg:#080C1A;--card:#0F1628;--dark:#F0F4FF;--muted:#94A3B8;--border:rgba(168,255,62,.1);--shadow:0 4px 32px rgba(0,0,0,.4)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--fb);background:var(--bg);color:var(--dark);transition:background var(--ease),color var(--ease);overflow-x:hidden;width:100%}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:#080C1A;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s,visibility .5s}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.ld-logo{font-family:var(--fd);font-size:2rem;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:18px;text-align:center}
+.ld-logo span{color:#A8FF3E}
+.ld-bar{width:140px;height:3px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.ld-fill{height:100%;background:linear-gradient(90deg,#1A5CFF,#A8FF3E);border-radius:99px;animation:ldbar 1.4s ease forwards}
+@keyframes ldbar{from{width:0}to{width:100%}}
+
+/* UTILS */
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;width:100%}
+.tag{display:inline-block;font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:var(--bglow);padding:5px 14px;border-radius:99px;border:1px solid rgba(26,92,255,.15);margin-bottom:16px}
+[data-theme="dark"] .tag{color:var(--lemon);background:var(--lglow);border-color:rgba(168,255,62,.2)}
+.h2{font-family:var(--fd);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px}
+.sub{font-size:1rem;color:var(--muted);line-height:1.75;max-width:500px}
+.btn-p{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:600;font-size:.9rem;padding:13px 26px;border-radius:99px;border:none;cursor:pointer;background:var(--blue);color:#fff;box-shadow:0 4px 20px rgba(26,92,255,.3);transition:all var(--ease);text-align:center}
+.btn-p:hover{background:var(--bdark);transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:600;font-size:.9rem;padding:13px 26px;border-radius:99px;border:1.5px solid var(--border);cursor:pointer;background:transparent;color:var(--dark);transition:all var(--ease)}
+.btn-o:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
+.btn-l{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:600;font-size:.9rem;padding:13px 26px;border-radius:99px;border:none;cursor:pointer;background:var(--lemon);color:#080C1A;box-shadow:0 4px 20px rgba(168,255,62,.25);transition:all var(--ease)}
+.btn-l:hover{background:var(--ldark);transform:translateY(-2px)}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all var(--ease)}
+#nav.scrolled{background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+[data-theme="dark"] #nav.scrolled{background:rgba(8,12,26,.92)}
+.nav-in{max-width:1120px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;flex-shrink:0}
+.nav-logo span{color:var(--blue)}
+[data-theme="dark"] .nav-logo span{color:var(--lemon)}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:color var(--ease);cursor:pointer;white-space:nowrap}
+.nav-links a:hover{color:var(--dark)}
+.nav-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.theme-btn{width:36px;height:36px;border-radius:50%;background:transparent;border:1px solid var(--border);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;color:var(--dark);transition:all var(--ease);flex-shrink:0}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;flex-shrink:0}
+.ham span{display:block;width:22px;height:2px;background:var(--dark);border-radius:99px}
+
+/* MOBILE MENU */
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+.mob-overlay.open{display:block}
+.mob-menu{position:fixed;top:0;right:-100%;width:min(300px,85vw);height:100vh;background:var(--bg);z-index:200;padding:70px 28px 36px;display:flex;flex-direction:column;gap:4px;transition:right var(--ease);border-left:1px solid var(--border);overflow-y:auto}
+.mob-menu.open{right:0}
+.mob-menu a{font-family:var(--fd);font-size:1.1rem;font-weight:600;color:var(--dark);padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;display:block}
+.mob-menu a:hover{color:var(--blue)}
+.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--dark)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;padding-bottom:60px;position:relative;overflow:hidden}
+.blob1{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(26,92,255,.18),transparent 70%);top:-120px;right:-60px;pointer-events:none;animation:bf 8s ease-in-out infinite alternate}
+.blob2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(168,255,62,.12),transparent 70%);bottom:-60px;left:-40px;pointer-events:none;animation:bf 10s ease-in-out infinite alternate-reverse}
+@keyframes bf{from{transform:translate(0,0)}to{transform:translate(20px,12px)}}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1;width:100%}
+.hero-ey{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);margin-bottom:20px;flex-wrap:wrap}
+.dot{width:8px;height:8px;min-width:8px;border-radius:50%;background:var(--lemon);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(168,255,62,.4)}50%{box-shadow:0 0 0 8px rgba(168,255,62,0)}}
+.hero-title{font-family:var(--fd);font-size:clamp(2rem,4vw,3.4rem);font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:18px}
+.grad{background:linear-gradient(135deg,#1A5CFF,#A8FF3E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.75;max-width:100%;margin-bottom:28px}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat-n{font-family:var(--fd);font-size:1.7rem;font-weight:800;letter-spacing:-1px}
+.stat-l{font-size:.78rem;color:var(--muted);margin-top:2px}
+.av-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+.av-frame{width:320px;height:360px;border-radius:28px;background:linear-gradient(145deg,#1A5CFF 0%,#0F3FBB 50%,#050d30 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 28px 70px rgba(26,92,255,.35);font-size:6rem}
+.av-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(168,255,62,.07),transparent)}
+.badge{position:absolute;padding:8px 12px;border-radius:11px;font-size:.74rem;font-weight:600;display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.15);white-space:nowrap}
+.b1{background:rgba(255,255,255,.96);color:#111827;top:22px;right:-14px;box-shadow:0 6px 18px rgba(0,0,0,.12);animation:bflt 4s ease-in-out infinite}
+.b2{background:#A8FF3E;color:#080C1A;bottom:48px;left:-18px;box-shadow:0 6px 18px rgba(168,255,62,.3);animation:bflt 4s 1.5s ease-in-out infinite}
+.b3{background:rgba(26,92,255,.92);color:#fff;top:100px;left:-22px;box-shadow:0 6px 18px rgba(26,92,255,.3);animation:bflt 4s .75s ease-in-out infinite}
+@keyframes bflt{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* ABOUT */
+#about{padding:var(--gap) 0}
+.about-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px;align-items:center;width:100%}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;box-shadow:var(--shadow);position:relative;overflow:hidden;word-wrap:break-word}
+.about-card::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--lemon))}
+.about-av{font-size:3.8rem;text-align:center;margin-bottom:14px}
+.about-name{font-family:var(--fd);font-size:1.35rem;font-weight:800;text-align:center;margin-bottom:4px}
+.about-role{color:var(--muted);text-align:center;font-size:.85rem;margin-bottom:20px}
+.about-meta{display:flex;flex-direction:column;gap:8px}
+.meta-item{display:flex;align-items:center;gap:9px;font-size:.83rem;color:var(--muted);background:var(--bg);padding:9px 12px;border-radius:10px;word-break:break-word}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.val{display:flex;gap:9px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px}
+.val-txt{font-size:.82rem;font-weight:500;line-height:1.4}
+.val-sub{font-size:.75rem;color:var(--muted);margin-top:2px}
+.bio{font-size:.97rem;color:var(--muted);line-height:1.8;margin-bottom:14px}
+.bio strong{color:var(--dark);font-weight:600}
+
+/* SERVICES */
+#services{padding:var(--gap) 0;background:var(--card)}
+[data-theme="dark"] #services{background:#0a1020}
+.svc-hd{text-align:center;margin-bottom:46px}
+.svc-hd .sub{margin:0 auto}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;width:100%}
+.svc-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:30px;transition:all var(--ease)}
+.svc-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(26,92,255,.1);border-color:var(--blue)}
+.svc-ic{width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--bdark));display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px;box-shadow:0 6px 18px rgba(26,92,255,.25)}
+.svc-title{font-family:var(--fd);font-size:1.05rem;font-weight:700;margin-bottom:9px}
+.svc-desc{font-size:.86rem;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.svc-bens{display:flex;flex-direction:column;gap:7px}
+.svc-b{font-size:.82rem;font-weight:500;display:flex;align-items:flex-start;gap:7px;line-height:1.4}
+.svc-b::before{content:'✓';color:var(--ldark);font-weight:700;flex-shrink:0}
+
+/* PROJECTS */
+#projects{padding:var(--gap) 0}
+.proj-hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:14px}
+.feat{background:linear-gradient(135deg,#0F3FBB 0%,#050d30 60%,#111827 100%);border-radius:22px;padding:42px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;margin-bottom:20px;position:relative;overflow:hidden;width:100%}
+.feat::before{content:'FEATURED';position:absolute;top:20px;right:20px;font-family:var(--fd);font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--lemon);background:rgba(168,255,62,.1);border:1px solid rgba(168,255,62,.25);padding:4px 11px;border-radius:99px}
+.fp-tag{color:var(--lemon);font-size:.76rem;font-weight:500;margin-bottom:10px}
+.fp-title{font-family:var(--fd);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:10px}
+.fp-desc{color:rgba(255,255,255,.62);font-size:.88rem;line-height:1.75;margin-bottom:20px}
+.fp-tech{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.tp{font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12)}
+.fp-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-g{display:inline-flex;align-items:center;gap:6px;font-family:var(--fd);font-weight:600;font-size:.85rem;padding:10px 20px;border-radius:99px;background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.18);cursor:pointer;transition:all var(--ease)}
+.fp-vis{background:rgba(255,255,255,.05);border-radius:18px;height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem;border:1px solid rgba(255,255,255,.08)}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:all var(--ease)}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--blue)}
+.pc-ic{width:42px;height:42px;border-radius:11px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:14px}
+.pc-title{font-family:var(--fd);font-size:.97rem;font-weight:700;margin-bottom:6px}
+.pc-desc{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.pc-tech{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.pp{font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:99px;background:rgba(26,92,255,.08);color:var(--blue)}
+[data-theme="dark"] .pp{background:rgba(168,255,62,.08);color:var(--lemon)}
+.pc-link{font-size:.8rem;font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:4px;transition:gap var(--ease)}
+[data-theme="dark"] .pc-link{color:var(--lemon)}
+.pc-link:hover{gap:8px}
+
+/* SKILLS */
+#skills{padding:var(--gap) 0;background:var(--card)}
+[data-theme="dark"] #skills{background:#0a1020}
+.sk-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:start;width:100%}
+.sk-cat-t{font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sk-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.sk-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg);border:1px solid var(--border);border-radius:9px;font-size:.8rem;font-weight:500;transition:all var(--ease);cursor:default}
+.sk-badge:hover{border-color:var(--blue);color:var(--blue);background:var(--bglow)}
+[data-theme="dark"] .sk-badge:hover{border-color:var(--lemon);color:var(--lemon);background:var(--lglow)}
+.sbar{margin-bottom:16px}
+.sbar-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.sbar-name{font-size:.86rem;font-weight:500}
+.sbar-pct{font-size:.78rem;color:var(--muted);font-family:var(--fd);font-weight:700}
+.sbar-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--lemon));width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* TESTIMONIALS */
+#testimonials{padding:var(--gap) 0}
+.testi-hd{text-align:center;margin-bottom:44px}
+.testi-hd .sub{margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;transition:all var(--ease)}
+.testi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.testi-q{font-size:2rem;color:var(--blue);opacity:.35;line-height:1;margin-bottom:12px;font-family:serif}
+[data-theme="dark"] .testi-q{color:var(--lemon)}
+.testi-txt{font-size:.86rem;color:var(--muted);line-height:1.75;margin-bottom:18px;font-style:italic}
+.testi-auth{display:flex;align-items:center;gap:10px}
+.testi-av{width:40px;height:40px;min-width:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--lemon));display:flex;align-items:center;justify-content:center;font-size:1rem}
+.testi-name{font-weight:600;font-size:.85rem}
+.testi-role{font-size:.74rem;color:var(--muted)}
+.testi-stars{color:#FBBF24;font-size:.72rem;margin-top:2px}
+
+/* CTA */
+#cta{padding:60px 24px}
+.cta-box{background:linear-gradient(135deg,#0F3FBB 0%,#050d30 100%);border-radius:24px;padding:64px 44px;text-align:center;position:relative;overflow:hidden;max-width:1072px;margin:0 auto}
+.cta-box::before{content:'';position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(168,255,62,.1),transparent 70%);pointer-events:none}
+.cta-ey{color:var(--lemon);font-size:.76rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.cta-title{font-family:var(--fd);font-size:clamp(1.6rem,3.5vw,2.7rem);font-weight:800;color:#fff;letter-spacing:-1.5px;margin-bottom:12px}
+.cta-sub{color:rgba(255,255,255,.58);font-size:.95rem;max-width:440px;margin:0 auto 28px;line-height:1.7}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-wa{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:600;font-size:.9rem;padding:13px 26px;border-radius:99px;background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.18);cursor:pointer;transition:all var(--ease);text-decoration:none;justify-content:center}
+.btn-wa:hover{background:rgba(255,255,255,.16)}
+
+/* CONTACT */
+#contact{padding:var(--gap) 0}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;width:100%}
+.c-links{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.c-link{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:14px 18px;transition:all var(--ease);text-decoration:none}
+.c-link:hover{border-color:var(--blue);transform:translateX(4px);box-shadow:var(--shadow)}
+[data-theme="dark"] .c-link:hover{border-color:var(--lemon)}
+.c-ic{width:40px;height:40px;min-width:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.c-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.c-val{font-size:.88rem;font-weight:500;margin-top:2px;word-break:break-all}
+.form{display:flex;flex-direction:column;gap:13px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.flabel{font-size:.81rem;font-weight:500}
+.finput,.ftextarea,.fselect{padding:11px 14px;border:1.5px solid var(--border);border-radius:11px;background:var(--bg);color:var(--dark);font-family:var(--fb);font-size:.88rem;outline:none;transition:border-color var(--ease);width:100%}
+.finput:focus,.ftextarea:focus,.fselect:focus{border-color:var(--blue)}
+[data-theme="dark"] .finput:focus,[data-theme="dark"] .ftextarea:focus,[data-theme="dark"] .fselect:focus{border-color:var(--lemon)}
+.ftextarea{resize:vertical;min-height:115px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 0}
+.footer-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.f-logo{font-family:var(--fd);font-weight:800;font-size:1.1rem}
+.f-logo span{color:var(--blue)}
+[data-theme="dark"] .f-logo span{color:var(--lemon)}
+.f-copy{font-size:.79rem;color:var(--muted)}
+.f-links{display:flex;gap:18px}
+.f-links a{font-size:.79rem;color:var(--muted);transition:color var(--ease);cursor:pointer}
+.f-links a:hover{color:var(--blue)}
+[data-theme="dark"] .f-links a:hover{color:var(--lemon)}
+
+/* ====== RESPONSIVE ====== */
+
+/* Tablet landscape: 769–1024px */
+@media(min-width:769px) and (max-width:1024px){
+  :root{--gap:76px}
+  .wrap{padding:0 28px}
+  .av-frame{width:270px;height:310px;font-size:5.5rem}
+  .hero-grid{gap:36px}
+  .proj-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-grid{gap:36px}
+  .cta-box{padding:56px 36px}
+  .feat{padding:36px;gap:32px}
+  .sk-layout{gap:44px}
+}
+
+/* Tablet portrait & large phones: max 768px */
+@media(max-width:768px){
+  :root{--gap:60px}
+  .wrap{padding:0 18px}
+
+  /* NAV */
+  .nav-links{display:none}
+  .ham{display:flex}
+  .nav-in{padding:15px 18px}
+  .nav-r .btn-p{display:none}
+
+  /* HERO */
+  #hero{padding-top:76px;min-height:auto;padding-bottom:50px}
+  .hero-grid{grid-template-columns:1fr;gap:32px;text-align:center}
+  .av-wrap{order:-1}
+  .av-frame{width:200px;height:230px;font-size:4.5rem;margin:0 auto}
+  .b1,.b2,.b3{display:none}
+  .hero-title{font-size:clamp(1.8rem,6.5vw,2.5rem);letter-spacing:-1px}
+  .hero-sub{font-size:.93rem;max-width:100%;margin-left:auto;margin-right:auto}
+  .hero-ey{justify-content:center}
+  .hero-ctas{flex-direction:column;align-items:stretch;gap:10px}
+  .hero-ctas .btn-p,.hero-ctas .btn-o,.hero-ctas .btn-l{width:100%;justify-content:center;font-size:.9rem}
+  .hero-stats{justify-content:center;gap:20px}
+
+  /* ABOUT */
+  .about-grid{grid-template-columns:1fr;gap:24px}
+  .vals{grid-template-columns:1fr;gap:9px}
+  .about-card{padding:22px}
+
+  /* SERVICES */
+  .svc-grid{grid-template-columns:1fr;gap:14px}
+  .svc-hd{text-align:left}
+  .svc-hd .sub{margin:0}
+
+  /* PROJECTS */
+  .proj-hd{flex-direction:column;align-items:stretch;gap:12px}
+  .proj-hd .btn-o{width:100%;justify-content:center}
+  .feat{grid-template-columns:1fr;padding:24px 20px;gap:24px}
+  .feat::before{font-size:.58rem;padding:3px 9px}
+  .fp-title{font-size:1.45rem}
+  .fp-vis{height:120px;font-size:3rem}
+  .fp-btns{flex-direction:column;gap:8px}
+  .fp-btns .btn-l,.fp-btns .btn-g{width:100%;justify-content:center}
+  .proj-grid{grid-template-columns:1fr;gap:12px}
+
+  /* SKILLS */
+  .sk-layout{grid-template-columns:1fr;gap:36px}
+
+  /* TESTIMONIALS */
+  .testi-grid{grid-template-columns:1fr;gap:14px}
+  .testi-hd{text-align:left}
+  .testi-hd .sub{margin:0}
+
+  /* CTA */
+  #cta{padding:40px 16px}
+  .cta-box{padding:40px 20px;border-radius:18px}
+  .cta-title{font-size:clamp(1.45rem,5.5vw,2rem);letter-spacing:-.5px}
+  .cta-sub{font-size:.9rem}
+  .cta-btns{flex-direction:column;align-items:stretch;gap:10px}
+  .cta-btns .btn-l,.cta-btns .btn-wa{width:100%;justify-content:center}
+
+  /* CONTACT */
+  .contact-grid{grid-template-columns:1fr;gap:32px}
+  .form-row{grid-template-columns:1fr}
+
+  /* FOOTER */
+  .footer-in{flex-direction:column;align-items:center;text-align:center;gap:10px}
+  .f-links{flex-wrap:wrap;justify-content:center}
+
+  /* GENERAL */
+  .h2{font-size:clamp(1.55rem,5.5vw,2.1rem);letter-spacing:-1px}
+  .sub{max-width:100%;font-size:.93rem}
+}
+
+/* Small phones: max 420px */
+@media(max-width:420px){
+  :root{--gap:50px}
+  .wrap{padding:0 14px}
+  .nav-in{padding:13px 14px}
+  .nav-logo{font-size:1.2rem}
+
+  .hero-title{font-size:clamp(1.55rem,7.5vw,1.95rem)}
+  .av-frame{width:170px;height:200px;font-size:3.8rem}
+  .hero-stats{gap:14px}
+  .stat-n{font-size:1.3rem}
+  .stat-l{font-size:.7rem}
+
+  .btn-p,.btn-o,.btn-l{font-size:.83rem;padding:11px 18px}
+
+  .about-card{padding:18px}
+  .about-name{font-size:1.15rem}
+  .meta-item{font-size:.77rem;padding:8px 10px}
+
+  .svc-card{padding:18px}
+  .svc-ic{width:44px;height:44px;font-size:1.2rem;margin-bottom:14px}
+  .svc-title{font-size:1rem}
+  .svc-desc{font-size:.82rem}
+  .svc-b{font-size:.78rem}
+
+  .feat{padding:18px 16px}
+  .fp-title{font-size:1.25rem}
+  .fp-desc{font-size:.82rem}
+  .tp{font-size:.68rem}
+
+  .pc{padding:16px}
+  .pc-title{font-size:.9rem}
+  .pc-desc{font-size:.78rem}
+
+  .sk-badge{font-size:.74rem;padding:5px 9px}
+  .sk-badges{gap:5px}
+  .sbar-name{font-size:.8rem}
+
+  .testi-card{padding:16px}
+  .testi-txt{font-size:.82rem}
+
+  .cta-box{padding:36px 16px}
+  .cta-title{font-size:clamp(1.25rem,6.5vw,1.6rem)}
+  .cta-sub{font-size:.84rem}
+
+  .c-link{padding:12px 14px}
+  .c-val{font-size:.76rem}
+  .c-label{font-size:.67rem}
+
+  .mob-menu{padding:62px 20px 30px}
+  .mob-menu a{font-size:1rem}
+
+  .h2{font-size:clamp(1.4rem,6.5vw,1.8rem)}
+  .f-copy{font-size:.72rem}
+  .f-links a{font-size:.72rem}
+  .footer-in{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <div class="ld-logo">7ven<span>Point</span></div>
+    <div class="ld-bar"><div class="ld-fill"></div></div>
+  </div>
+</div>
+
+<div class="mob-overlay" id="mob-overlay" onclick="closeMob()"></div>
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" onclick="closeMob()">&#10005;</button>
+  <a onclick="goTo('hero');closeMob()">Home</a>
+  <a onclick="goTo('about');closeMob()">About</a>
+  <a onclick="goTo('services');closeMob()">Services</a>
+  <a onclick="goTo('projects');closeMob()">Projects</a>
+  <a onclick="goTo('skills');closeMob()">Skills</a>
+  <a onclick="goTo('testimonials');closeMob()">Clients</a>
+  <a onclick="goTo('contact');closeMob()">Contact</a>
+</div>
+
+<nav id="nav">
+  <div class="nav-in">
+    <div class="nav-logo">7ven<span>Point</span></div>
+    <ul class="nav-links">
+      <li><a onclick="goTo('about')">About</a></li>
+      <li><a onclick="goTo('services')">Services</a></li>
+      <li><a onclick="goTo('projects')">Projects</a></li>
+      <li><a onclick="goTo('skills')">Skills</a></li>
+      <li><a onclick="goTo('testimonials')">Clients</a></li>
+      <li><a onclick="goTo('contact')">Contact</a></li>
+    </ul>
+    <div class="nav-r">
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">&#127769;</button>
+      <button class="btn-p" style="padding:9px 16px;font-size:.82rem" onclick="goTo('contact')">Hire Me</button>
+      <button class="ham" onclick="openMob()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="blob1"></div>
+  <div class="blob2"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-ey rv"><span class="dot"></span>&nbsp;Available &middot; Based in Nigeria &#127475;&#127468;</div>
+        <h1 class="hero-title rv d1">I Build High-Performance <span class="grad">Websites &amp; Apps</span> That Drive Results</h1>
+        <p class="hero-sub rv d2">No fluff, no templates. I engineer digital products that solve real business problems and turn visitors into customers. From Lagos to the world.</p>
+        <div class="hero-ctas rv d3">
+          <button class="btn-p" onclick="goTo('contact')">&#10022; Hire Me</button>
+          <button class="btn-o" onclick="goTo('projects')">View Projects &rarr;</button>
+          <button class="btn-l">&#11015; Download CV</button>
+        </div>
+        <div class="hero-stats rv d4">
+          <div><div class="stat-n">30+</div><div class="stat-l">Projects Shipped</div></div>
+          <div><div class="stat-n">3+</div><div class="stat-l">Years Experience</div></div>
+          <div><div class="stat-n">100%</div><div class="stat-l">Client Satisfaction</div></div>
+        </div>
+      </div>
+      <div class="av-wrap rv d2">
+        <div class="av-frame">&#128104;&#127998;&#8205;&#128187;</div>
+        <div class="badge b1">&#128640; Available for Work</div>
+        <div class="badge b2">&#9889; Fast Delivery</div>
+        <div class="badge b3">&#127757; Global Clients</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="rv">
+        <div class="about-card">
+          <div class="about-av">&#128104;&#127998;&#8205;&#128187;</div>
+          <div class="about-name">7venPoint</div>
+          <div class="about-role">Full-Stack Developer &amp; Digital Solutions Expert</div>
+          <div class="about-meta">
+            <div class="meta-item">&#128205; Nigeria &mdash; Serving Global Clients</div>
+            <div class="meta-item">&#128188; 3+ Years Professional Experience</div>
+            <div class="meta-item">&#127891; Self-Taught &amp; Industry Certified</div>
+            <div class="meta-item">&#128336; Response Time &lt; 24hrs</div>
+          </div>
+        </div>
+      </div>
+      <div class="rv d2">
+        <span class="tag">About Me</span>
+        <h2 class="h2">Code That Actually Works for <em>Your</em> Business</h2>
+        <p class="bio">I&rsquo;m <strong>7venPoint</strong> &mdash; a full-stack developer, mobile app builder, content creator, and educator based in Nigeria. I don&rsquo;t just write code. I architect solutions that <strong>solve real problems, drive revenue, and scale with your business</strong>.</p>
+        <p class="bio">From startups seeking their first MVP to established businesses needing a digital overhaul &mdash; my approach is simple: <strong>understand the business first, then engineer the solution.</strong></p>
+        <div class="vals">
+          <div class="val"><span style="font-size:1.2rem;flex-shrink:0">&#9889;</span><div><div class="val-txt">Speed &amp; Performance</div><div class="val-sub">Fast-loading, optimized builds</div></div></div>
+          <div class="val"><span style="font-size:1.2rem;flex-shrink:0">&#127919;</span><div><div class="val-txt">Results-First Mindset</div><div class="val-sub">Every feature serves a goal</div></div></div>
+          <div class="val"><span style="font-size:1.2rem;flex-shrink:0">&#128274;</span><div><div class="val-txt">Clean, Secure Code</div><div class="val-sub">Production-grade always</div></div></div>
+          <div class="val"><span style="font-size:1.2rem;flex-shrink:0">&#127807;</span><div><div class="val-txt">Continuous Learning</div><div class="val-sub">Always at the tech frontier</div></div></div>
+        </div>
+        <button class="btn-p" onclick="goTo('contact')">Let&rsquo;s Talk &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="svc-hd rv">
+      <span class="tag">What I Do</span>
+      <h2 class="h2">Services Built to Generate Real Value</h2>
+      <p class="sub">Not just deliverables &mdash; business outcomes. Every service is designed to move the needle for your brand.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card rv">
+        <div class="svc-ic">&#127760;</div>
+        <div class="svc-title">Website Development</div>
+        <p class="svc-desc">Business sites, landing pages, e-commerce stores &mdash; engineered for speed, SEO, and conversions from day one.</p>
+        <div class="svc-bens">
+          <div class="svc-b">Mobile-first, lightning-fast performance</div>
+          <div class="svc-b">SEO-optimized from the ground up</div>
+          <div class="svc-b">Converts visitors into paying customers</div>
+          <div class="svc-b">Custom CMS integration (no lock-in)</div>
+        </div>
+      </div>
+      <div class="svc-card rv d1">
+        <div class="svc-ic">&#128241;</div>
+        <div class="svc-title">Mobile App Development</div>
+        <p class="svc-desc">Android-focused apps built with React Native / Expo &mdash; cross-platform quality with native feel. APK delivery included.</p>
+        <div class="svc-bens">
+          <div class="svc-b">Android &amp; cross-platform apps</div>
+          <div class="svc-b">Offline-first for Nigerian networks</div>
+          <div class="svc-b">Firebase backend for real-time data</div>
+          <div class="svc-b">App Store submission support</div>
+        </div>
+      </div>
+      <div class="svc-card rv d2">
+        <div class="svc-ic">&#127912;</div>
+        <div class="svc-title">UI/UX Design</div>
+        <p class="svc-desc">Beautiful, intuitive interfaces that users love &mdash; designed with data, not guesswork. Wireframes to pixel-perfect designs.</p>
+        <div class="svc-bens">
+          <div class="svc-b">User research-informed decisions</div>
+          <div class="svc-b">Figma designs with developer handoff</div>
+          <div class="svc-b">Accessibility &amp; usability standards</div>
+          <div class="svc-b">Conversion-optimized user flows</div>
+        </div>
+      </div>
+      <div class="svc-card rv d3">
+        <div class="svc-ic">&#128295;</div>
+        <div class="svc-title">Optimization &amp; SEO</div>
+        <p class="svc-desc">Already have a site? Let me make it faster, rank higher, and convert better with a full performance audit.</p>
+        <div class="svc-bens">
+          <div class="svc-b">Core Web Vitals improvement</div>
+          <div class="svc-b">Technical SEO audit &amp; implementation</div>
+          <div class="svc-b">Page speed optimization (90+ scores)</div>
+          <div class="svc-b">Analytics &amp; conversion tracking</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="proj-hd">
+      <div class="rv"><span class="tag">Portfolio</span><h2 class="h2">Products I&rsquo;ve Shipped to Market</h2></div>
+      <button class="btn-o rv" onclick="goTo('contact')">See All Work &rarr;</button>
+    </div>
+    <div class="feat rv">
+      <div>
+        <div class="fp-tag">&#10022; Student Exam Prep App</div>
+        <h3 class="fp-title">PassMate NG</h3>
+        <p class="fp-desc">A student-focused exam prep app for Nigerian secondary school students. Features past question banks, AI-generated quizzes, progress tracking, and offline access.</p>
+        <div class="fp-tech">
+          <span class="tp">React Native</span><span class="tp">Expo</span><span class="tp">Firebase</span><span class="tp">Node.js</span><span class="tp">Firestore</span>
+        </div>
+        <div class="fp-btns">
+          <button class="btn-l" style="font-size:.84rem;padding:10px 20px">Live Demo &rarr;</button>
+          <button class="btn-g">GitHub &#8599;</button>
+        </div>
+      </div>
+      <div class="fp-vis">&#128218;</div>
+    </div>
+    <div class="proj-grid">
+      <div class="pc rv"><div class="pc-ic">&#128722;</div><div class="pc-title">ShopEasy NG</div><p class="pc-desc">Full e-commerce platform with Paystack integration, inventory management, and WhatsApp order notifications.</p><div class="pc-tech"><span class="pp">Next.js</span><span class="pp">Firebase</span><span class="pp">Paystack</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+      <div class="pc rv d1"><div class="pc-ic">&#127973;</div><div class="pc-title">HealthTrack App</div><p class="pc-desc">Mobile health tracker with medication reminders and doctor report generation for chronic condition management.</p><div class="pc-tech"><span class="pp">Expo</span><span class="pp">React Native</span><span class="pp">Firebase</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+      <div class="pc rv d2"><div class="pc-ic">&#128202;</div><div class="pc-title">BizDash Pro</div><p class="pc-desc">Real-time business analytics dashboard for SMEs. Track sales, inventory, and customer trends in one place.</p><div class="pc-tech"><span class="pp">React</span><span class="pp">Chart.js</span><span class="pp">Node.js</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+      <div class="pc rv"><div class="pc-ic">&#127891;</div><div class="pc-title">EduPortal LMS</div><p class="pc-desc">Learning management system for online academies with video courses, quizzes, and student certificates.</p><div class="pc-tech"><span class="pp">Next.js</span><span class="pp">Firebase</span><span class="pp">Cloudinary</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+      <div class="pc rv d1"><div class="pc-ic">&#127968;</div><div class="pc-title">PropList Nigeria</div><p class="pc-desc">Property listing platform for Nigerian real estate agents with advanced filters and virtual tour embeds.</p><div class="pc-tech"><span class="pp">React</span><span class="pp">Node.js</span><span class="pp">MongoDB</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+      <div class="pc rv d2"><div class="pc-ic">&#9997;&#65039;</div><div class="pc-title">Creator Blog Platform</div><p class="pc-desc">Custom blogging platform with newsletter integration, SEO tools, and subscription monetization.</p><div class="pc-tech"><span class="pp">Next.js</span><span class="pp">MDX</span><span class="pp">Stripe</span></div><a href="#" class="pc-link">View Project &rarr;</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sk-layout">
+      <div class="rv">
+        <span class="tag">Tech Stack</span>
+        <h2 class="h2">The Tools I Master</h2>
+        <p class="sub" style="margin-bottom:30px">Modern, battle-tested technologies chosen for performance and scalability.</p>
+        <div class="sk-cat-t">Frontend</div>
+        <div class="sk-badges"><span class="sk-badge">&#127760; HTML5</span><span class="sk-badge">&#127912; CSS3</span><span class="sk-badge">&#9889; JavaScript</span><span class="sk-badge">&#8635; React</span><span class="sk-badge">&#9650; Next.js</span></div>
+        <div class="sk-cat-t">Mobile</div>
+        <div class="sk-badges"><span class="sk-badge">&#128241; React Native</span><span class="sk-badge">&#128295; Expo</span><span class="sk-badge">&#129302; Android</span></div>
+        <div class="sk-cat-t">Backend &amp; Database</div>
+        <div class="sk-badges"><span class="sk-badge">&#128293; Firebase</span><span class="sk-badge">&#128994; Node.js</span><span class="sk-badge">&#127811; MongoDB</span></div>
+        <div class="sk-cat-t">Tools &amp; Workflow</div>
+        <div class="sk-badges"><span class="sk-badge">&#128025; GitHub</span><span class="sk-badge">&#127917; Figma</span><span class="sk-badge">&#9729;&#65039; Vercel</span><span class="sk-badge">&#128051; Docker</span></div>
+      </div>
+      <div class="rv d2" id="skillBars">
+        <h3 style="font-family:var(--fd);font-weight:700;margin-bottom:22px;font-size:1rem">Proficiency Levels</h3>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">React / Next.js</span><span class="sbar-pct">95%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="95"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">JavaScript / ES6+</span><span class="sbar-pct">93%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="93"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">React Native / Expo</span><span class="sbar-pct">88%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="88"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">Firebase &amp; Backend</span><span class="sbar-pct">85%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="85"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">UI/UX Design (Figma)</span><span class="sbar-pct">80%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="80"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">Node.js &amp; APIs</span><span class="sbar-pct">82%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="82"></div></div></div>
+        <div class="sbar"><div class="sbar-top"><span class="sbar-name">SEO &amp; Web Performance</span><span class="sbar-pct">87%</span></div><div class="sbar-track"><div class="sbar-fill" data-w="87"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="testi-hd rv">
+      <span class="tag">Client Love</span>
+      <h2 class="h2">What Clients Say</h2>
+      <p class="sub">Real feedback from real businesses that trusted me with their digital future.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card rv">
+        <div class="testi-q">&ldquo;</div>
+        <p class="testi-txt">7venPoint delivered our e-commerce store in record time and it performed beyond expectations. Sales increased significantly after launch. Very professional and communicative throughout.</p>
+        <div class="testi-auth"><div class="testi-av">&#128105;&#127998;</div><div><div class="testi-name">Adaeze Okonkwo</div><div class="testi-role">CEO, FashionHive Lagos</div><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div></div>
+      </div>
+      <div class="testi-card rv d1">
+        <div class="testi-q">&ldquo;</div>
+        <p class="testi-txt">I needed a mobile app for my school and 7venPoint built exactly what I envisioned and more. The app works flawlessly offline, which is crucial for our students. Highly recommended.</p>
+        <div class="testi-auth"><div class="testi-av">&#128104;&#127999;</div><div><div class="testi-name">Emmanuel Balogun</div><div class="testi-role">Director, BrightMinds Academy</div><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div></div>
+      </div>
+      <div class="testi-card rv d2">
+        <div class="testi-q">&ldquo;</div>
+        <p class="testi-txt">Working with 7venPoint was seamless. He understood our business quickly and built a dashboard our team actually wants to use. The UI/UX detail was impressive. Definitely hiring again.</p>
+        <div class="testi-auth"><div class="testi-av">&#128104;&#127997;</div><div><div class="testi-name">Tunde Adeyemi</div><div class="testi-role">Founder, LogiTrack Solutions</div><div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="cta-box">
+    <div style="position:relative;z-index:1">
+      <div class="cta-ey">&#10022; Let&rsquo;s Build Together</div>
+      <h2 class="cta-title">Ready to Build Something Great?</h2>
+      <p class="cta-sub">Whether you have a fully formed idea or just a problem to solve &mdash; let&rsquo;s talk and figure out exactly what to build.</p>
+      <div class="cta-btns">
+        <button class="btn-l" onclick="goTo('contact')">&#128172; Let&rsquo;s Work Together</button>
+        <a href="https://wa.me/2348038723465" target="_blank" class="btn-wa">&#128241; WhatsApp Me</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="rv">
+        <span class="tag">Contact</span>
+        <h2 class="h2">Get In Touch</h2>
+        <p class="sub">Have a project in mind? Reach out &mdash; I typically respond within 24 hours.</p>
+        <div class="c-links">
+          <a href="mailto:7venPointGlobal@gmail.com" class="c-link">
+            <div class="c-ic" style="background:linear-gradient(135deg,#1A5CFF,#0F3FBB)">&#128231;</div>
+            <div><div class="c-label">Email</div><div class="c-val">7venPointGlobal@gmail.com</div></div>
+          </a>
+          <a href="https://wa.me/2348038723465" target="_blank" class="c-link">
+            <div class="c-ic" style="background:linear-gradient(135deg,#25D366,#128C7E)">&#128241;</div>
+            <div><div class="c-label">WhatsApp</div><div class="c-val">+234 803 872 3465</div></div>
+          </a>
+          <a href="https://github.com/samobayemi" target="_blank" class="c-link">
+            <div class="c-ic" style="background:linear-gradient(135deg,#24292e,#444)">&#128025;</div>
+            <div><div class="c-label">GitHub</div><div class="c-val">github.com/samobayemi</div></div>
+          </a>
+          <a href="https://x.com/samuel_obayemi" target="_blank" class="c-link">
+            <div class="c-ic" style="background:linear-gradient(135deg,#000,#333);font-weight:800;font-size:.9rem;color:#fff">X</div>
+            <div><div class="c-label">Twitter / X</div><div class="c-val">@samuel_obayemi</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="rv d2">
+        <form class="form" id="contactForm">
+          <div class="form-row">
+            <div class="fg"><label class="flabel">Full Name</label><input class="finput" type="text" placeholder="John Doe" required></div>
+            <div class="fg"><label class="flabel">Email Address</label><input class="finput" type="email" placeholder="john@company.com" required></div>
+          </div>
+          <div class="fg">
+            <label class="flabel">Project Type</label>
+            <select class="fselect">
+              <option>Website Development</option>
+              <option>Mobile App Development</option>
+              <option>UI/UX Design</option>
+              <option>SEO &amp; Optimization</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label class="flabel">Budget Range</label>
+            <select class="fselect">
+              <option>&#8358;100k - &#8358;300k</option>
+              <option>&#8358;300k - &#8358;700k</option>
+              <option>&#8358;700k - &#8358;1.5M</option>
+              <option>&#8358;1.5M+</option>
+              <option>Let's discuss</option>
+            </select>
+          </div>
+          <div class="fg"><label class="flabel">Tell Me About Your Project</label><textarea class="ftextarea" placeholder="Describe your project, goals, and timeline..." required></textarea></div>
+          <button type="submit" class="btn-p" id="formBtn" style="width:100%;justify-content:center;padding:14px">Send Message &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-in">
+      <div class="f-logo">7ven<span>Point</span></div>
+      <div class="f-copy">&copy; 2025 7venPoint. Built with passion in Nigeria &#127475;&#127468;</div>
+      <div class="f-links">
+        <a onclick="goTo('about')">About</a>
+        <a onclick="goTo('services')">Services</a>
+        <a onclick="goTo('projects')">Work</a>
+        <a onclick="goTo('contact')">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('hidden')},1700)});
+function goTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})}
+var dark=false;
+function toggleTheme(){dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'');document.getElementById('themeBtn').textContent=dark?'\u2600\uFE0F':'\uD83C\uDF19'}
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+function openMob(){document.getElementById('mob-menu').classList.add('open');document.getElementById('mob-overlay').classList.add('open');document.body.style.overflow='hidden'}
+function closeMob(){document.getElementById('mob-menu').classList.remove('open');document.getElementById('mob-overlay').classList.remove('open');document.body.style.overflow=''}
+var revEls=document.querySelectorAll('.rv');
+var revObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('on')})},{threshold:0.08,rootMargin:'0px 0px -20px 0px'});
+revEls.forEach(function(el){revObs.observe(el)});
+setTimeout(function(){document.querySelectorAll('#hero .rv').forEach(function(el){el.classList.add('on')})},1800);
+var barsAnimated=false;
+var barObs=new IntersectionObserver(function(entries){if(entries[0].isIntersecting&&!barsAnimated){barsAnimated=true;document.querySelectorAll('.sbar-fill').forEach(function(bar){bar.style.width=bar.getAttribute('data-w')+'%'})}},{threshold:0.2});
+var skillSection=document.getElementById('skillBars');
+if(skillSection)barObs.observe(skillSection);
+document.getElementById('contactForm').addEventListener('submit',function(e){e.preventDefault();var btn=document.getElementById('formBtn');btn.textContent='Message Sent! I\'ll be in touch soon.';btn.style.background='#A8FF3E';btn.style.color='#080C1A';setTimeout(function(){btn.textContent='Send Message \u2192';btn.style.background='';btn.style.color='';e.target.reset()},4000)});
+</script>
+</body>
+</html>
