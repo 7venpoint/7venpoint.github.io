@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BookHub Assistant – Samuel Obayemi</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a0a00 0%, #2d1200 50%, #1a0a00 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', serif;
+      padding: 24px;
+    }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #C9A96E; border-radius: 10px; }
+
+    #chat-container {
+      width: 100%;
+      max-width: 740px;
+      background: #FDF8F2;
+      border-radius: 20px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 4px 20px rgba(201,169,110,0.15);
+      display: flex;
+      flex-direction: column;
+      height: 88vh;
+      min-height: 520px;
+      max-height: 840px;
+      overflow: hidden;
+      border: 1px solid #E8D5B0;
+    }
+
+    /* Header */
+    #chat-header {
+      background: linear-gradient(135deg, #2D1200 0%, #5C2D00 60%, #8B4513 100%);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 2px solid #C9A96E;
+      position: relative;
+      overflow: hidden;
+    }
+    #chat-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A96E' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    #header-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #C9A96E, #F0D090);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 1px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+
+    #header-text { position: relative; z-index: 1; }
+    #header-title { color: #F0D090; font-weight: 700; font-size: 16px; letter-spacing: 0.3px; font-family: 'Georgia', serif; }
+    #header-subtitle { color: rgba(240,208,144,0.7); font-size: 11px; margin-top: 2px; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    #header-status {
+      display: flex; align-items: center; gap: 5px;
+      color: rgba(240,208,144,0.65); font-size: 11px; margin-top: 3px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    #status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; display: inline-block; animation: pulse 2s infinite; }
+
+    #header-badge {
+      margin-left: auto;
+      background: rgba(201,169,110,0.2);
+      border: 1px solid rgba(201,169,110,0.4);
+      border-radius: 20px;
+      padding: 4px 12px;
+      color: #F0D090;
+      font-size: 11px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      position: relative; z-index: 1;
+      white-space: nowrap;
+    }
+
+    /* Messages area */
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      background: #FDF8F2;
+    }
+
+    .message-row {
+      display: flex;
+      margin-bottom: 18px;
+      align-items: flex-end;
+      gap: 10px;
+      animation: fadeSlideIn 0.3s ease;
+    }
+    .message-row.user { justify-content: flex-end; }
+    .message-row.assistant { justify-content: flex-start; }
+
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .avatar.assistant {
+      background: linear-gradient(135deg, #5C2D00, #8B4513);
+      color: #F0D090;
+      border: 1.5px solid #C9A96E;
+      font-size: 16px;
+    }
+    .avatar.user {
+      background: #EDE0CC;
+      color: #5C2D00;
+      font-size: 13px;
+      border: 1.5px solid #C9A96E;
+    }
+
+    .bubble {
+      max-width: 70%;
+      padding: 13px 17px;
+      font-size: 14px;
+      line-height: 1.7;
+      font-family: 'Georgia', serif;
+    }
+    .bubble.assistant {
+      border-radius: 16px 16px 16px 4px;
+      background: #fff;
+      color: #2D1200;
+      box-shadow: 0 2px 8px rgba(93,45,0,0.08);
+      border: 1px solid #E8D5B0;
+    }
+    .bubble.user {
+      border-radius: 16px 16px 4px 16px;
+      background: linear-gradient(135deg, #5C2D00, #8B4513);
+      color: #FDF8F2;
+      box-shadow: 0 3px 14px rgba(93,45,0,0.25);
+    }
+
+    /* Quick suggestions */
+    #suggestions {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 0 24px 16px;
+      background: #FDF8F2;
+    }
+    .suggestion-chip {
+      background: #fff;
+      border: 1.5px solid #C9A96E;
+      color: #5C2D00;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .suggestion-chip:hover {
+      background: #5C2D00;
+      color: #F0D090;
+      border-color: #5C2D00;
+    }
+
+    /* Typing indicator */
+    #typing-indicator {
+      display: none;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    #typing-indicator.visible { display: flex; }
+    #typing-dots {
+      display: flex; align-items: center; gap: 6px;
+      padding: 13px 17px;
+      background: #fff;
+      border-radius: 16px 16px 16px 4px;
+      border: 1px solid #E8D5B0;
+      box-shadow: 0 2px 8px rgba(93,45,0,0.08);
+    }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #C9A96E;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+
+    /* Error */
+    #error-msg {
+      display: none;
+      text-align: center; color: #B91C1C; font-size: 13px;
+      padding: 8px 16px; background: #FEF2F2;
+      border-radius: 8px; margin-bottom: 12px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      border: 1px solid #FCA5A5;
+    }
+
+    /* Divider */
+    #divider { height: 1px; background: #E8D5B0; margin: 0 24px; }
+
+    /* Input area */
+    #input-area { padding: 16px 24px 18px; background: #FDF8F2; }
+
+    #input-box {
+      display: flex; gap: 10px; align-items: flex-end;
+      background: #fff; border-radius: 14px; padding: 10px 12px;
+      border: 1.5px solid #C9A96E; transition: border-color 0.2s;
+      box-shadow: 0 2px 8px rgba(93,45,0,0.06);
+    }
+    #input-box:focus-within { border-color: #8B4513; box-shadow: 0 2px 12px rgba(93,45,0,0.14); }
+
+    #user-input {
+      flex: 1; border: none; background: transparent;
+      resize: none; font-size: 14px; line-height: 1.6;
+      color: #2D1200; font-family: 'Georgia', serif;
+      max-height: 120px; overflow-y: auto;
+    }
+    #user-input:focus { outline: none; }
+    #user-input::placeholder { color: #B59A7A; font-style: italic; }
+
+    #send-btn {
+      width: 38px; height: 38px; border-radius: 10px; border: none;
+      background: #E8D5B0; color: #B59A7A;
+      cursor: not-allowed;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s; font-size: 18px;
+    }
+    #send-btn.active {
+      background: linear-gradient(135deg, #5C2D00, #8B4513);
+      color: #F0D090; cursor: pointer;
+    }
+    #send-btn.active:hover { opacity: 0.88; transform: scale(1.05); }
+
+    #input-hint {
+      text-align: center; margin-top: 10px;
+      font-size: 11px; color: #B59A7A;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chat-container">
+  <!-- Header -->
+  <div id="chat-header">
+    <div id="header-icon">📚</div>
+    <div id="header-text">
+      <div id="header-title">Samuel Obayemi BookHub</div>
+      <div id="header-subtitle">Your Personal Book Companion</div>
+      <div id="header-status">
+        <span id="status-dot"></span>
+        Online & Ready to Help
+      </div>
+    </div>
+    <div id="header-badge">✦ AI Assistant</div>
+  </div>
+
+  <!-- Messages -->
+  <div id="messages">
+    <div id="typing-indicator">
+      <div class="avatar assistant">📖</div>
+      <div id="typing-dots">
+        <div class="typing-dot" style="animation-delay:0s"></div>
+        <div class="typing-dot" style="animation-delay:0.2s"></div>
+        <div class="typing-dot" style="animation-delay:0.4s"></div>
+      </div>
+    </div>
+    <div id="error-msg"></div>
+  </div>
+
+  <!-- Quick suggestions -->
+  <div id="suggestions">
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">📖 Recommend a book</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">✉️ Contact the site</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">🛒 How to order</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">🙏 Christian books</button>
+    <button class="suggestion-chip" onclick="sendSuggestion(this)">💡 Self-help picks</button>
+  </div>
+
+  <div id="divider"></div>
+
+  <!-- Input -->
+  <div id="input-area">
+    <div id="input-box">
+      <textarea id="user-input" rows="1" placeholder="Ask me about books, orders, or anything…"></textarea>
+      <button id="send-btn" disabled>↑</button>
+    </div>
+    <div id="input-hint">Press Enter to send · Shift+Enter for new line</div>
+  </div>
+</div>
+
+<script>
+  // ─── CONFIG — Replace with your actual Anthropic API key ──────────────────
+  const API_KEY = "YOUR_ANTHROPIC_API_KEY_HERE";
+  // ──────────────────────────────────────────────────────────────────────────
+
+  const SYSTEM_PROMPT = `You are the official AI book assistant for Samuel Obayemi BookHub — a warm, inspiring, and knowledgeable companion for book lovers. Your name is "BookBuddy".
+
+ABOUT THE SITE:
+- Name: Samuel Obayemi BookHub
+- A curated online book hub by Nigerian author and curator Samuel Obayemi
+- Categories: Christian & Inspirational, Fiction & Novels, Self-help & Personal Development, Business & Finance
+- Contact Email: 7venPointGlobal@gmail.com
+- WhatsApp: +2348038723465
+- GitHub: github.com/samobayemi
+- X (Twitter): @samuel_obayemi
+
+YOUR ROLE:
+1. Recommend books based on the visitor's mood, interests, or goals — across the four categories
+2. Answer FAQs about the site, its categories, and how it works
+3. Help visitors place book orders or send inquiries — direct them to WhatsApp (+2348038723465) or email (7venPointGlobal@gmail.com)
+4. Chat about book topics, themes, summaries, and why certain books are life-changing
+5. Provide contact details when asked
+
+YOUR TONE:
+- Inspiring and motivational — make visitors feel that the right book can change their life
+- Warm, encouraging, and enthusiastic about books
+- Never cold or robotic — speak like a passionate book lover who genuinely cares
+- Use occasional book metaphors and uplifting language
+- Keep responses concise but impactful
+
+BOUNDARIES:
+- Only discuss topics related to books, reading, the BookHub site, and Samuel Obayemi's work
+- If asked something off-topic, gently redirect back to books and the site
+- Never make up book titles or authors — if unsure, encourage them to reach out via WhatsApp or email`;
+
+  let conversationHistory = [];
+  let isLoading = false;
+
+  const messagesEl = document.getElementById("messages");
+  const typingEl = document.getElementById("typing-indicator");
+  const errorEl = document.getElementById("error-msg");
+  const inputEl = document.getElementById("user-input");
+  const sendBtn = document.getElementById("send-btn");
+  const suggestionsEl = document.getElementById("suggestions");
+
+  // Initial greeting
+  addMessage("assistant", "Welcome to Samuel Obayemi BookHub! 📚✨\n\nI'm BookBuddy, your personal reading companion. Whether you're searching for a faith-filled Christian read, an inspiring self-help book, a gripping novel, or a powerful business guide — I'm here to help you find your next great read!\n\nHow can I help you today?");
+
+  // Input listeners
+  inputEl.addEventListener("input", () => {
+    inputEl.style.height = "auto";
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
+    const hasText = inputEl.value.trim().length > 0;
+    sendBtn.disabled = !hasText || isLoading;
+    sendBtn.classList.toggle("active", hasText && !isLoading);
+  });
+
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (!sendBtn.disabled) sendMessage();
+    }
+  });
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  function sendSuggestion(btn) {
+    const text = btn.textContent.replace(/^[^\w]+/, "").trim();
+    inputEl.value = text;
+    inputEl.dispatchEvent(new Event("input"));
+    sendMessage();
+    // Hide suggestions after first use
+    suggestionsEl.style.display = "none";
+  }
+
+  function addMessage(role, text) {
+    const row = document.createElement("div");
+    row.className = `message-row ${role}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = `avatar ${role}`;
+    avatar.textContent = role === "assistant" ? "📖" : "U";
+
+    const bubble = document.createElement("div");
+    bubble.className = `bubble ${role}`;
+    // Support line breaks
+    bubble.style.whiteSpace = "pre-wrap";
+    bubble.textContent = text;
+
+    if (role === "assistant") {
+      row.appendChild(avatar);
+      row.appendChild(bubble);
+    } else {
+      row.appendChild(bubble);
+      row.appendChild(avatar);
+    }
+
+    messagesEl.insertBefore(row, typingEl);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function setLoading(val) {
+    isLoading = val;
+    typingEl.classList.toggle("visible", val);
+    sendBtn.disabled = val || inputEl.value.trim().length === 0;
+    sendBtn.classList.toggle("active", !val && inputEl.value.trim().length > 0);
+    scrollToBottom();
+  }
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.style.display = "block";
+    setTimeout(() => { errorEl.style.display = "none"; }, 6000);
+  }
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text || isLoading) return;
+
+    inputEl.value = "";
+    inputEl.style.height = "auto";
+    errorEl.style.display = "none";
+    suggestionsEl.style.display = "none";
+
+    conversationHistory.push({ role: "user", content: text });
+    addMessage("user", text);
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true"
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: conversationHistory,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err?.error?.message || "API error");
+      }
+
+      const data = await response.json();
+      const reply = data.content?.map(b => b.text).filter(Boolean).join("") || "I'm sorry, I couldn't find the words — but a great book always can! Try reaching us on WhatsApp: +2348038723465";
+      conversationHistory.push({ role: "assistant", content: reply });
+      addMessage("assistant", reply);
+    } catch (e) {
+      conversationHistory.pop();
+      showError("⚠ Couldn't connect right now. Please check your connection or reach us on WhatsApp: +2348038723465");
+    } finally {
+      setLoading(false);
+    }
+  }
+</script>
+
+</body>
+</html>
